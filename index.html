@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10131f">
+  <title>TaskFlow — Менеджер задач</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <a class="brand" href="#">
+        <span class="brand-icon">✓</span>
+        <span>Task<span class="accent">Flow</span></span>
+      </a>
+
+      <p class="nav-title">МЕНЮ</p>
+      <nav class="navigation">
+        <button class="nav-link active" data-filter="all">
+          <span>▦</span> Все задачи
+          <span class="nav-count" id="allCount">0</span>
+        </button>
+        <button class="nav-link" data-filter="today">
+          <span>◷</span> На сегодня
+        </button>
+        <button class="nav-link" data-filter="active">
+          <span>○</span> В процессе
+        </button>
+        <button class="nav-link" data-filter="completed">
+          <span>✓</span> Выполненные
+        </button>
+        <button class="nav-link" data-filter="overdue">
+          <span>⚑</span> Просроченные
+        </button>
+      </nav>
+
+      <p class="nav-title">КАТЕГОРИИ</p>
+      <div class="category-list">
+        <button class="category-link" data-category="Работа">
+          <span class="category-dot purple"></span> Работа
+        </button>
+        <button class="category-link" data-category="Учёба">
+          <span class="category-dot blue"></span> Учёба
+        </button>
+        <button class="category-link" data-category="Личное">
+          <span class="category-dot green"></span> Личное
+        </button>
+        <button class="category-link" data-category="Другое">
+          <span class="category-dot orange"></span> Другое
+        </button>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="mini-progress">
+          <div class="progress-heading">
+            <span>Твой прогресс</span>
+            <strong id="sidePercent">0%</strong>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="sideProgress"></div>
+          </div>
+          <p id="sideProgressText">Начни выполнять задачи!</p>
+        </div>
+
+        <button class="nav-link" id="themeToggle">
+          <span id="themeIcon">☾</span> Сменить тему
+        </button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="currentDate">ТВОЙ ПЛАН НА ДЕНЬ</p>
+          <h1 id="pageTitle">Мои задачи</h1>
+          <p class="subtitle">Маленькие шаги ведут к большим результатам.</p>
+        </div>
+        <div class="top-actions">
+          <button class="icon-btn" id="exportBtn" title="Экспорт задач">⇩</button>
+          <button class="primary-btn" id="openAddBtn">＋ Новая задача</button>
+        </div>
+      </header>
+
+      <section class="stats-grid">
+        <article class="stat-card">
+          <div class="stat-top">
+            <span>Всего задач</span>
+            <span class="stat-icon purple-bg">▦</span>
+          </div>
+          <strong id="totalStat">0</strong>
+          <small>Все твои дела</small>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-top">
+            <span>В процессе</span>
+            <span class="stat-icon blue-bg">◷</span>
+          </div>
+          <strong id="activeStat">0</strong>
+          <small>Ещё предстоит сделать</small>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-top">
+            <span>Выполнено</span>
+            <span class="stat-icon green-bg">✓</span>
+          </div>
+          <strong id="completedStat">0</strong>
+          <small>Отличная работа!</small>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-top">
+            <span>Просрочено</span>
+            <span class="stat-icon red-bg">⚑</span>
+          </div>
+          <strong id="overdueStat">0</strong>
+          <small>Требуют внимания</small>
+        </article>
+      </section>
+
+      <section class="productivity-card">
+        <div class="productivity-info">
+          <div class="productivity-symbol">✦</div>
+          <div>
+            <h2>Твоя продуктивность</h2>
+            <p id="progressMessage">Каждая выполненная задача — твоя победа.</p>
+          </div>
+        </div>
+        <div class="overall-progress">
+          <strong id="overallPercent">0%</strong>
+          <div class="progress-track">
+            <div class="progress-fill" id="overallProgress"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tasks-panel">
+        <div class="tasks-heading">
+          <div>
+            <h2 id="listTitle">Список задач</h2>
+            <p id="listSubtitle">Управляй своим временем эффективно</p>
+          </div>
+          <button class="text-btn" id="clearCompletedBtn">
+            Очистить выполненные
+          </button>
+        </div>
+
+        <div class="toolbar">
+          <label class="search-box">
+            <span>⌕</span>
+            <input id="searchInput" type="search"
+              placeholder="Поиск задач..." autocomplete="off">
+          </label>
+
+          <select id="priorityFilter" aria-label="Фильтр по приоритету">
+            <option value="all">Все приоритеты</option>
+            <option value="high">Высокий</option>
+            <option value="medium">Средний</option>
+            <option value="low">Низкий</option>
+          </select>
+
+          <select id="sortSelect" aria-label="Сортировка">
+            <option value="newest">Сначала новые</option>
+            <option value="oldest">Сначала старые</option>
+            <option value="deadline">По сроку</option>
+            <option value="priority">По приоритету</option>
+            <option value="alphabetical">По названию</option>
+          </select>
+        </div>
+
+        <div class="task-list" id="taskList"></div>
+
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">✦</div>
+          <h3>Здесь пока пусто</h3>
+          <p>Добавь свою первую задачу и начни действовать!</p>
+          <button class="primary-btn" id="emptyAddBtn">＋ Создать задачу</button>
+        </div>
+
+        <footer class="list-footer">
+          <span id="footerCount">Показано 0 задач</span>
+          <span>Данные сохраняются автоматически <b>●</b></span>
+        </footer>
+      </section>
+
+      <footer class="app-footer">
+        Сделано с ♥ для продуктивной жизни · TaskFlow
+      </footer>
+    </main>
+  </div>
+
+  <dialog id="taskDialog" class="task-dialog">
+    <form id="taskForm">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">ПЛАНИРОВАНИЕ</p>
+          <h2 id="dialogTitle">Новая задача</h2>
+        </div>
+        <button type="button" class="icon-btn" id="closeDialogBtn"
+          aria-label="Закрыть">✕</button>
+      </div>
+
+      <label class="field-label" for="taskTitle">Название задачи *</label>
+      <input id="taskTitle" class="field" maxlength="120"
+        placeholder="Например, изучить JavaScript" required>
+
+      <label class="field-label" for="taskDescription">Описание</label>
+      <textarea id="taskDescription" class="field" maxlength="1000"
+        rows="3" placeholder="Дополнительная информация..."></textarea>
+
+      <div class="form-row">
+        <div>
+          <label class="field-label" for="taskCategory">Категория</label>
+          <select id="taskCategory" class="field">
+            <option>Работа</option>
+            <option>Учёба</option>
+            <option>Личное</option>
+            <option>Другое</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label" for="taskPriority">Приоритет</label>
+          <select id="taskPriority" class="field">
+            <option value="high">Высокий</option>
+            <option value="medium" selected>Средний</option>
+            <option value="low">Низкий</option>
+          </select>
+        </div>
+      </div>
+
+      <label class="field-label" for="taskDeadline">Срок выполнения</label>
+      <input id="taskDeadline" class="field" type="date">
+
+      <div class="dialog-actions">
+        <button type="button" class="secondary-btn" id="cancelDialogBtn">
+          Отмена
+        </button>
+        <button type="submit" class="primary-btn" id="saveTaskBtn">
+          Сохранить задачу
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
